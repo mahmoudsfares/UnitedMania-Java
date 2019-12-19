@@ -38,7 +38,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_main);
+                setContentView(R.layout.activity_news);
 
                 //Declaration & initial visibility status for different cases' views
                 progressBar = findViewById(R.id.loading_spinner);
@@ -95,13 +95,13 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         public void updateUi(List<News> news) {
-                //Showing only emptyState TextView when the quakes array is empty
+                //Showing only emptyState TextView when the news array is empty
                 if (news.isEmpty()) {
                 progressBar.setVisibility(View.GONE);
                 emptyState.setVisibility(View.VISIBLE);
                 newsListView.setVisibility(View.GONE);
                 }
-                //Showing only earthquakeListView when the quakes array isn't empty
+                //Showing only newsListView when the news array isn't empty
                 //Setting the adapter to the customAdapter mAdapter to handle the requested data
                 else {
                 progressBar.setVisibility(View.GONE);
@@ -112,14 +112,12 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
                 }
 
-        //Get the last saved minimum magnitude from the preferences
-        //Rebuild the API's URL with requested parameters
         @Override
         public Loader<ArrayList<News>> onCreateLoader(int i, Bundle bundle) {
                 return new NewsLoader(NewsActivity.this, REQUEST_URL);
         }
 
-        //Update the UI after retrieving the requested Quake data
+        //Update the UI after retrieving the requested News data
         @Override
         public void onLoadFinished(android.content.Loader<ArrayList<News>> loader, ArrayList<News> news) {
                 updateUi(news);

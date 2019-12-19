@@ -46,8 +46,9 @@ public class NewsAdapter extends ArrayAdapter<News>{
         LinearLayout newsListItem = (LinearLayout) listItemView.findViewById(R.id.news_list_item);
         newsListItem.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(currentNews.getUrl()));
-                startActivity(getContext(),i,null);
+                /*Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(currentNews.getUrl()));
+                startActivity(getContext(),i,null);*/
+
             }
         });
 

@@ -8,25 +8,33 @@
     android:padding="@dimen/normal_padding"
     >
 
+    <LinearLayout
+        android:id="@+id/details_header_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_height">
+
     <TextView
         android:id="@+id/details_source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="source.com"
         android:textColor="@color/blackText"
-        android:layout_alignParentTop="true"
+        android:layout_weight="1"
+        android:layout_gravity="bottom"
         ></TextView>
 
-    <TextView
-        android:id="@+id/details_time"
+    <Button
+        android:id="@+id/details_refresh_button"
+        android:text="@string/refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/details_source"
-        android:layout_alignParentRight="true"
-        android:text="3 hours"
-        android:gravity="right"
-        android:textColor="@color/blackText"
-        ></TextView>
+        android:background="@color/refreshButtonBackground"
+        android:textColor="@color/refreshButtonText"
+        android:layout_gravity="bottom"
+        >
+    </Button>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/details_title"
@@ -35,7 +43,8 @@
         android:text="This is the news title, more details are available when clicked."
         android:textSize="@dimen/news_font"
         android:textColor="@color/whiteText"
-        android:layout_below="@+id/details_source"
+        android:layout_below="@+id/details_header_bar"
+
         ></TextView>
 
     <TextView
@@ -46,5 +55,28 @@
         android:text="Here is the news details, it tells more and more and more about a single piece of news. If you are interested in the title, then reading this detailed news will let you know more about the subject that the title is about.. hope you have a good reading!"
         android:textColor="@color/whiteText"
         ></TextView>
+
+    <TextView
+        android:id="@+id/details_no_results"
+        android:text="@string/no_results"
+        android:textColor="@color/whiteText"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/details_header_bar"
+        android:visibility="gone"
+        ></TextView>
+
+    <ProgressBar
+        android:id="@+id/details_loading_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateTint="@color/progressBar"
+        ></ProgressBar>
+
 
 </RelativeLayout>
