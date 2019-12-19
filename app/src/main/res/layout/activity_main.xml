@@ -1,0 +1,72 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/normal_padding"
+    android:paddingRight="@dimen/normal_padding"
+    tools:context=".NewsActivity"
+    >
+    <LinearLayout
+        android:id="@+id/header_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/search_layout_height"
+        android:layout_alignParentTop="true"
+        >
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/latest_news"
+            android:textSize="@dimen/title_font"
+            android:textColor="@color/headerText"
+            android:gravity="center_vertical"
+            >
+        </TextView>
+        <Button
+            android:id="@+id/refresh_button"
+            android:text="@string/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:layout_margin="@dimen/search_layout_margin"
+            android:background="@color/refreshButtonBackground"
+            android:textColor="@color/refreshButtonText"
+            >
+        </Button>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_below="@+id/header_bar"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <TextView
+        android:id="@+id/no_results"
+        android:text="@string/no_results"
+        android:textColor="@color/whiteText"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header_bar"
+        android:visibility="gone"
+        ></TextView>
+
+    <ProgressBar
+        android:id="@+id/loading_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateTint="@color/progressBar"
+        ></ProgressBar>
+
+</RelativeLayout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailsActivity"
+    android:padding="@dimen/normal_padding"
+    >
+
+    <TextView
+        android:id="@+id/details_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="source.com"
+        android:textColor="@color/blackText"
+        android:layout_alignParentTop="true"
+        ></TextView>
+
+    <TextView
+        android:id="@+id/details_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/details_source"
+        android:layout_alignParentRight="true"
+        android:text="3 hours"
+        android:gravity="right"
+        android:textColor="@color/blackText"
+        ></TextView>
+
+    <TextView
+        android:id="@+id/details_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is the news title, more details are available when clicked."
+        android:textSize="@dimen/news_font"
+        android:textColor="@color/whiteText"
+        android:layout_below="@+id/details_source"
+        ></TextView>
+
+    <TextView
+        android:id="@+id/details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/details_title"
+        android:text="Here is the news details, it tells more and more and more about a single piece of news. If you are interested in the title, then reading this detailed news will let you know more about the subject that the title is about.. hope you have a good reading!"
+        android:textColor="@color/whiteText"
+        ></TextView>
+
+</RelativeLayout>

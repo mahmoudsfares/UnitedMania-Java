@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="normal_padding">16dp</dimen>
+    <dimen name="search_layout_height">65dp</dimen>
+    <dimen name="search_layout_margin">10dp</dimen>
+    <dimen name="internal_margin">8dp</dimen>
+    <dimen name="title_font">30sp</dimen>
+    <dimen name="news_font">20sp</dimen>
+
+</resources>

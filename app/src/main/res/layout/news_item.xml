@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/news_list_item"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/normal_padding"
+    >
+    <ImageView
+        android:id="@+id/news_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/news_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="source.com"
+        android:textColor="@color/blackText"
+        ></TextView>
+    <TextView
+        android:id="@+id/news_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is the news title, more details are available when clicked."
+        android:textSize="@dimen/news_font"
+        android:textColor="@color/whiteText"
+        ></TextView>
+
+</LinearLayout>
