@@ -1,6 +1,5 @@
 package com.example.unitedmania;
 
-import android.net.Uri;
 import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,9 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.example.unitedmania.NewsActivity.LOG_TAG;
 
@@ -48,10 +45,8 @@ public final class QueryUtils {
                 //Get the news source url
                 String url = currentObj.getString("url");
 
-                //Get the news image
-                String img = currentObj.getString("urlToImage");
 
-                news.add(new News(source,title,details,url, Uri.parse(img)));
+                news.add(new News(source,title,details,url));
             }
 
         } catch (JSONException e) {

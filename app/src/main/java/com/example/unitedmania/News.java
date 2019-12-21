@@ -10,14 +10,12 @@ public class News {
     private String mTitle;
     private String mDetails;
     private String mUrl;
-    private Uri mImg;
 
-    public News (String source, String title, String details, String url, Uri img){
+    public News (String source, String title, String details, String url){
         mSource = source;
         mTitle = title;
         mDetails = details;
         mUrl = url;
-        mImg = img;
     }
 
     public String getSource() {
@@ -36,7 +34,4 @@ public class News {
         return mUrl;
     }
 
-    public Uri getImg() {
-        return mImg;
-    }
 }

@@ -37,17 +37,12 @@ public class NewsAdapter extends ArrayAdapter<News>{
         TextView newsTitle = listItemView.findViewById(R.id.news_title);
         newsTitle.setText(currentNews.getTitle());
 
-        //Set the image related to the piece of news
-        ImageView newsImage = listItemView.findViewById(R.id.news_image);
-        newsImage.setImageURI(null);
-        newsImage.setImageURI(currentNews.getImg());
-
         //Go to the corresponding URL to know more about a piece of news when clicked on.
         LinearLayout newsListItem = (LinearLayout) listItemView.findViewById(R.id.news_list_item);
         newsListItem.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                /*Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(currentNews.getUrl()));
-                startActivity(getContext(),i,null);*/
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(currentNews.getUrl()));
+                startActivity(getContext(),i,null);
 
             }
         });
