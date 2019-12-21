@@ -33,7 +33,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         //Refresh Button
         private Button refreshButton;
         //Counter that triggers a new loader on each click
-        private int loaderTrigger = 0;
+        private final int loaderTrigger = 0;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +52,11 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 //If there's a valid internet connection:
                 if (getNetworkInfo() != null){
-                getLoaderManager().initLoader(0, null, this);
+                getLoaderManager().initLoader(loaderTrigger, null, this);
                 }
                 //Show the noInternet Toast if else:
                 else {
-                    Toast noInternet = Toast.makeText(this, "No internet, check connection then refresh.",Toast.LENGTH_LONG);
+                    Toast noInternet = Toast.makeText(getApplicationContext(), "No internet, check connection then refresh.",Toast.LENGTH_LONG);
                     noInternet.show();
                     progressBar.setVisibility(View.GONE);
                     emptyState.setVisibility(View.GONE);
@@ -69,16 +69,13 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                                 emptyState.setVisibility(View.GONE);
                                 newsListView.setVisibility(View.GONE);
 
-                                //Increment loaderTrigger by 1 each time the button is clicked
-                                loaderTrigger++;
-
                                 //Initiate a new loader if there's a valid internet connection:
                                 if (getNetworkInfo() != null){
-                                        getLoaderManager().initLoader(loaderTrigger, null, NewsActivity.this);
+                                        getLoaderManager().restartLoader(loaderTrigger, null, NewsActivity.this);
                                 }
                                 //Show the noInternet Toast if else:
                                 else {
-                                        Toast noInternet = Toast.makeText(NewsActivity.this, "No internet, check connection then refresh.",Toast.LENGTH_LONG);
+                                        Toast noInternet = Toast.makeText(getApplicationContext(), "No internet, check connection then refresh.",Toast.LENGTH_LONG);
                                         noInternet.show();
                                         progressBar.setVisibility(View.GONE);
                                         emptyState.setVisibility(View.GONE);
