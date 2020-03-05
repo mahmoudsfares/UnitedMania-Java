@@ -1,10 +1,5 @@
 package com.example.unitedmania;
 
-import android.net.Uri;
-
-import java.net.URI;
-import java.net.URL;
-
 public class News {
     private String mSource;
     private String mTitle;

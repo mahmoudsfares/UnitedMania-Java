@@ -5,14 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="@dimen/normal_padding"
     tools:context=".DetailsActivity">
+
+    <TextView
+        android:id="@+id/details_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="source.com"
+        android:textColor="@color/sourceText"
+        ></TextView>
 
     <TextView
         android:id="@+id/details_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="this is the title"
-        android:textColor="#fff"
+        android:textSize="@dimen/title_font"
+        android:textColor="@color/whiteText"
+        android:layout_marginBottom="@dimen/internal_margin"
         ></TextView>
 
     <TextView
@@ -22,7 +33,23 @@
         android:text="you know what? this is an awesome text which i use to see if the
 layout is working well or not, i won't blame you, like at all, if you don't like it but
 i will be very very sad :("
-        android:textColor="#fff"
+        android:textSize="@dimen/news_font"
+        android:textColor="@color/whiteText"
+        android:layout_marginBottom="@dimen/internal_margin"
         ></TextView>
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/details_full_article"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FULL ARTICLE"
+            android:textSize="@dimen/full_article"
+            android:textColor="@color/fullDetails"
+            android:layout_alignParentRight="true"
+        ></TextView>
+    </RelativeLayout>
 
 </LinearLayout>

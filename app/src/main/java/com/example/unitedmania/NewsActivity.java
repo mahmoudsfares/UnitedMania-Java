@@ -7,6 +7,7 @@ import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -34,6 +35,15 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         private Button refreshButton;
         //Counter that triggers a new loader on each click
         private final int loaderTrigger = 0;
+        //The position of the newsListView
+        Parcelable state;
+
+        @Override
+        public void onPause() {
+            // Save newsListView state
+            state = newsListView.onSaveInstanceState();
+            super.onPause();
+        }
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -94,20 +104,24 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         public void updateUi(List<News> news) {
                 //Showing only emptyState TextView when the news array is empty
                 if (news.isEmpty()) {
-                progressBar.setVisibility(View.GONE);
-                emptyState.setVisibility(View.VISIBLE);
-                newsListView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                    newsListView.setVisibility(View.GONE);
                 }
                 //Showing only newsListView when the news array isn't empty
                 //Setting the adapter to the customAdapter mAdapter to handle the requested data
                 else {
-                progressBar.setVisibility(View.GONE);
-                emptyState.setVisibility(View.GONE);
-                newsListView.setVisibility(View.VISIBLE);
-                mNAdapter = new NewsAdapter(this, R.layout.news_item, news);
-                newsListView.setAdapter(mNAdapter);
+                    progressBar.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.GONE);
+                    newsListView.setVisibility(View.VISIBLE);
+                    mNAdapter = new NewsAdapter(this, R.layout.news_item, news);
+                    newsListView.setAdapter(mNAdapter);
+                    //if the newsListView was somewhere else than the beginning
+                    if(state != null) {
+                    newsListView.onRestoreInstanceState(state);
+                    }
                 }
-                }
+        }
 
         @Override
         public Loader<ArrayList<News>> onCreateLoader(int i, Bundle bundle) {

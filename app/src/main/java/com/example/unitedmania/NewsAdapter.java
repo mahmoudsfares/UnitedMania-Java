@@ -16,9 +16,6 @@ import static androidx.core.content.ContextCompat.startActivity;
 
 public class NewsAdapter extends ArrayAdapter<News>{
 
-    private String mTitle;
-    private String mDetails;
-
     public NewsAdapter(Context context, int resource, List<News> news) {
         super(context, 0, news);
     }
@@ -39,10 +36,7 @@ public class NewsAdapter extends ArrayAdapter<News>{
 
         //Setting the title's text.
         TextView newsTitle = listItemView.findViewById(R.id.news_title);
-        mTitle = currentNews.getTitle();
-        newsTitle.setText(mTitle);
-
-        mDetails = currentNews.getDetails();
+        newsTitle.setText(currentNews.getTitle());
 
         //Go to the corresponding URL to know more about a piece of news when clicked on.
         LinearLayout newsListItem = (LinearLayout) listItemView.findViewById(R.id.news_list_item);
@@ -50,11 +44,12 @@ public class NewsAdapter extends ArrayAdapter<News>{
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), DetailsActivity.class);
                 Bundle extras = new Bundle();
-                extras.putString("title", mTitle);
-                extras.putString("details", mDetails);
+                extras.putString("source", currentNews.getSource());
+                extras.putString("title", currentNews.getTitle());
+                extras.putString("details", currentNews.getDetails());
+                extras.putString("uri", currentNews.getUrl());
                 i.putExtras(extras);
                 startActivity(getContext(),i,null);
-
             }
         });
 
