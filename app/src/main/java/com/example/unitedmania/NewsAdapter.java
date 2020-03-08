@@ -47,7 +47,8 @@ public class NewsAdapter extends ArrayAdapter<News>{
                 extras.putString("source", currentNews.getSource());
                 extras.putString("title", currentNews.getTitle());
                 extras.putString("details", currentNews.getDetails());
-                extras.putString("uri", currentNews.getUrl());
+                extras.putString("url", currentNews.getUrl());
+                extras.putString("imageUrl", currentNews.getImageUrl());
                 i.putExtras(extras);
                 startActivity(getContext(),i,null);
             }

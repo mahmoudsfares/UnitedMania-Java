@@ -8,6 +8,12 @@
     android:padding="@dimen/normal_padding"
     tools:context=".DetailsActivity">
 
+    <ImageView
+        android:id="@+id/details_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></ImageView>
+
     <TextView
         android:id="@+id/details_source"
         android:layout_width="wrap_content"

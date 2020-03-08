@@ -45,8 +45,11 @@ public final class QueryUtils {
                 //Get the news source url
                 String url = currentObj.getString("url");
 
+                // Get the news corresponding image
+                String imageUrl = currentObj.getString("urlToImage");
 
-                news.add(new News(source,title,details,url));
+
+                news.add(new News(source,title,details,url,imageUrl));
             }
 
         } catch (JSONException e) {

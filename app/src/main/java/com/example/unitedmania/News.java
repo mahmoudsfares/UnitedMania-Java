@@ -1,16 +1,23 @@
 package com.example.unitedmania;
 
 public class News {
+    // news source
     private String mSource;
+    // news title
     private String mTitle;
+    // news details
     private String mDetails;
+    // news source url
     private String mUrl;
+    // news corresponding image
+    private String mImageUrl;
 
-    public News (String source, String title, String details, String url){
+    public News (String source, String title, String details, String url, String imageUrl){
         mSource = source;
         mTitle = title;
         mDetails = details;
         mUrl = url;
+        mImageUrl = imageUrl;
     }
 
     public String getSource() {
@@ -29,4 +36,7 @@ public class News {
         return mUrl;
     }
 
+    public String getImageUrl() {
+        return mImageUrl;
+    }
 }

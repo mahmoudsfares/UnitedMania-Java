@@ -3,9 +3,11 @@ package com.example.unitedmania;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import static androidx.core.content.ContextCompat.startActivity;
@@ -21,6 +23,8 @@ public class DetailsActivity extends AppCompatActivity {
 
         mUri = null;
 
+
+
         TextView sourceTv = findViewById(R.id.details_source);
         TextView titleTv = findViewById(R.id.details_title);
         TextView detailsTv = findViewById(R.id.details);
@@ -35,11 +39,14 @@ public class DetailsActivity extends AppCompatActivity {
         String title = extras.getString("title");
         String details = extras.getString("details");
 
+        new DownloadImageTask((ImageView) findViewById(R.id.details_image))
+                .execute(extras.getString("imageUrl"));
+
         int detailsStopPosition = details.indexOf("[+");
         if(detailsStopPosition != -1)
             details = details.substring(0,detailsStopPosition);
 
-        mUri = Uri.parse(extras.getString("uri"));
+        mUri = Uri.parse(extras.getString("url"));
 
         sourceTv.setText(source);
         titleTv.setText(title);
@@ -51,7 +58,6 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
 
     }
 }
