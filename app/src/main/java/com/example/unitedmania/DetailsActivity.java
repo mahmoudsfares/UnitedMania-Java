@@ -1,10 +1,12 @@
 package com.example.unitedmania;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,14 +18,13 @@ public class DetailsActivity extends AppCompatActivity {
 
     private Uri mUri;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
         mUri = null;
-
-
 
         TextView sourceTv = findViewById(R.id.details_source);
         TextView titleTv = findViewById(R.id.details_title);
@@ -38,7 +39,7 @@ public class DetailsActivity extends AppCompatActivity {
         String source = extras.getString("source");
         String title = extras.getString("title");
         String details = extras.getString("details");
-
+        
         new DownloadImageTask((ImageView) findViewById(R.id.details_image))
                 .execute(extras.getString("imageUrl"));
 
