@@ -39,8 +39,8 @@ public class DetailsActivity extends AppCompatActivity {
         String source = extras.getString("source");
         String title = extras.getString("title");
         String details = extras.getString("details");
-        
-        new DownloadImageTask((ImageView) findViewById(R.id.details_image))
+
+        new com.example.unitedmania.DownloadImageTask((ImageView) findViewById(R.id.details_image))
                 .execute(extras.getString("imageUrl"));
 
         int detailsStopPosition = details.indexOf("[+");

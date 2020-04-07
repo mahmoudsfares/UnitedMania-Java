@@ -14,19 +14,24 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-import static com.example.unitedmania.NewsActivity.LOG_TAG;
 
 public final class QueryUtils {
 
+    private static String LOG_TAG = QueryUtils.class.getName();
+
+    private static final String REQUEST_URL =
+            "https://newsapi.org/v2/everything?q=manchester%20united%7Cman%20utd%7Cman%20united%7Cmanchester%20utd&apiKey=47ba773d0f1147438a3d6244bc7f1e5e&sortBy=publishedAt&pageSize=100&language=en&fbclid=IwAR215STnwzrUekxittTkbK3Vn8INjsOE0Zl28uctn2lDwpOelkKVurJvWwc";
+
+
     //Return News List that contains the news data after parsing the JSONResponse
-    public static ArrayList<News> extractNews(String Url) throws JSONException {
+    public static ArrayList<News> extractNews() throws JSONException {
 
         //Create an empty ArrayList to hold the news data
         ArrayList<News> news = new ArrayList<>();
 
         //Try to parse the JSONResponse after extracting it from the URL
         try {
-            JSONObject root = new JSONObject(makeHttpRequest(createUrl(Url)));
+            JSONObject root = new JSONObject(makeHttpRequest(createUrl(REQUEST_URL)));
             JSONArray articles = root.getJSONArray("articles");
             for(int i=0;i<articles.length();i++){
 

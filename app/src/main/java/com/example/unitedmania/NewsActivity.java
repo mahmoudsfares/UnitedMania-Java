@@ -1,150 +1,133 @@
 package com.example.unitedmania;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.app.LoaderManager;
-import android.content.Context;
-import android.content.Loader;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.example.unitedmania.adapter.NewsAdapter;
 import java.util.ArrayList;
-import java.util.List;
 
-public class NewsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<News>> {
-        private static final String REQUEST_URL =
-        "https://newsapi.org/v2/everything?q=manchester%20united%7Cman%20utd%7Cman%20united%7Cmanchester%20utd&apiKey=47ba773d0f1147438a3d6244bc7f1e5e&sortBy=publishedAt&pageSize=100&language=en&fbclid=IwAR215STnwzrUekxittTkbK3Vn8INjsOE0Zl28uctn2lDwpOelkKVurJvWwc";
+public class NewsActivity extends AppCompatActivity{
 
-        public static final String LOG_TAG = NewsActivity.class.getName();
-        //CListView for custom listItem that contains news
-        private ListView newsListView;
-        //Custom adapter for newsListView
-        private NewsAdapter mNAdapter;
-        //Appears when there's no data to be retrieved
-        private TextView emptyState;
-        //Loading spinner for while the connection and parsing are in progress
-        private ProgressBar progressBar;
-        //Refresh Button
-        private Button refreshButton;
-        //Counter that triggers a new loader on each click
-        private final int loaderTrigger = 0;
-        //The position of the newsListView
-        Parcelable state;
+    // refreshes data by swiping
+    SwipeRefreshLayout swipeRefreshLayout;
 
-        @Override
-        public void onPause() {
-            // Save newsListView state
-            state = newsListView.onSaveInstanceState();
-            super.onPause();
-        }
+    // list that shows news
+    private RecyclerView mRecyclerView;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_news);
+    // custom adapter for the recyclerview's views
+    private NewsAdapter mNewsAdapter;
 
-                //Declaration & initial visibility status for different cases' views
-                progressBar = findViewById(R.id.loading_spinner);
-                progressBar.setVisibility(View.VISIBLE);
-                emptyState = findViewById(R.id.no_results);
-                emptyState.setVisibility(View.GONE);
-                newsListView = findViewById(R.id.list);
-                emptyState.setVisibility(View.GONE);
+    //Appears when there's no data to be retrieved
+    private TextView mErrorMessageDisplay;
 
-                refreshButton = findViewById(R.id.refresh_button);
+    //Loading spinner for while the connection and parsing are in progress
+    private ProgressBar mLoadingIndicator;
 
-                //If there's a valid internet connection:
-                if (getNetworkInfo() != null){
-                getLoaderManager().initLoader(loaderTrigger, null, this);
-                }
-                //Show the noInternet Toast if else:
-                else {
-                    Toast noInternet = Toast.makeText(getApplicationContext(), "No internet, check connection then refresh.",Toast.LENGTH_LONG);
-                    noInternet.show();
-                    progressBar.setVisibility(View.GONE);
-                    emptyState.setVisibility(View.GONE);
-                }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_news);
 
-                refreshButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_spinner);
+        mErrorMessageDisplay = (TextView) findViewById(R.id.no_results);
 
-                                progressBar.setVisibility(View.VISIBLE);
-                                emptyState.setVisibility(View.GONE);
-                                newsListView.setVisibility(View.GONE);
-
-                                //Initiate a new loader if there's a valid internet connection:
-                                if (getNetworkInfo() != null){
-                                        getLoaderManager().restartLoader(loaderTrigger, null, NewsActivity.this);
-                                }
-                                //Show the noInternet Toast if else:
-                                else {
-                                        Toast noInternet = Toast.makeText(getApplicationContext(), "No internet, check connection then refresh.",Toast.LENGTH_LONG);
-                                        noInternet.show();
-                                        progressBar.setVisibility(View.GONE);
-                                        emptyState.setVisibility(View.GONE);
-                                }
-                        }
-                });
-        }
-
-        //Checks the connectivity status
-        private NetworkInfo getNetworkInfo(){
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                return connectivityManager.getActiveNetworkInfo();
-        }
-
-
-        public void updateUi(List<News> news) {
-                //Showing only emptyState TextView when the news array is empty
-                if (news.isEmpty()) {
-                    progressBar.setVisibility(View.GONE);
-                    emptyState.setVisibility(View.VISIBLE);
-                    newsListView.setVisibility(View.GONE);
-                }
-                //Showing only newsListView when the news array isn't empty
-                //Setting the adapter to the customAdapter mAdapter to handle the requested data
-                else {
-                    progressBar.setVisibility(View.GONE);
-                    emptyState.setVisibility(View.GONE);
-                    newsListView.setVisibility(View.VISIBLE);
-                    mNAdapter = new NewsAdapter(this, R.layout.news_item, news);
-                    newsListView.setAdapter(mNAdapter);
-                    //if the newsListView was somewhere else than the beginning
-                    if(state != null) {
-                    newsListView.onRestoreInstanceState(state);
+        swipeRefreshLayout = findViewById(R.id.refresher);
+        swipeRefreshLayout.setColorSchemeResources(R.color.background);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadNewsData();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
-                }
+                }, 1000);
+            }
+        });
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mRecyclerView.setHasFixedSize(true);
+        // set views visibility then fetches data
+        loadNewsData();
+
+        // set recyclerview's adapter and layout manager
+        mNewsAdapter = new NewsAdapter();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setAdapter(mNewsAdapter);
+        mRecyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void loadNewsData() {
+        showNewsDataView();
+        new FetchNewsTask().execute();
+    }
+
+    private void showNewsDataView() {
+        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    // show error message when there's a problem with retrieving data
+    private void showErrorMessage() {
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
+
+
+    public class FetchNewsTask extends AsyncTask<String, Void, ArrayList<com.example.unitedmania.News>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // progressbar is shown while the api data is being fetched
+            mLoadingIndicator.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.INVISIBLE);
         }
 
         @Override
-        public Loader<ArrayList<News>> onCreateLoader(int i, Bundle bundle) {
-                return new NewsLoader(NewsActivity.this, REQUEST_URL);
+        protected ArrayList<com.example.unitedmania.News> doInBackground(String... params) {
+
+            try {
+                ArrayList<com.example.unitedmania.News> simpleJsonNewsData = com.example.unitedmania.QueryUtils.extractNews();
+                return simpleJsonNewsData;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
 
-        //Update the UI after retrieving the requested News data
         @Override
-        public void onLoadFinished(android.content.Loader<ArrayList<News>> loader, ArrayList<News> news) {
-                updateUi(news);
+        protected void onPostExecute(ArrayList<com.example.unitedmania.News> news) {
+
+            //after fetching, hide the progressbar
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+
+            if (news != null) {
+                Log.v("logmsg", news.size() + "");
+                showNewsDataView();
+                // use the fetched data to notify the recyclerview about the data changes
+                mNewsAdapter.setNews(NewsActivity.this, news);
+            } else {
+                showErrorMessage();
+            }
         }
-
-        //Clear the data after the loader is reset
-        @Override
-        public void onLoaderReset(android.content.Loader<ArrayList<News>> loader) {
-                mNAdapter.clear();
-        }
-
-
-
-
-
-
-
-
+    }
 }
 
+/*
+
+
+
+
+*/
