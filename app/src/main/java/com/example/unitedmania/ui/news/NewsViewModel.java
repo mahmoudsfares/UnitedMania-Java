@@ -13,7 +13,5 @@ public class NewsViewModel extends ViewModel {
         return newsList;
     }
 
-    void fetchNews () {
-        repo.fetchNews(newsList);
-    }
+    void fetchNews () { repo.fetchNews(newsList); }
 }

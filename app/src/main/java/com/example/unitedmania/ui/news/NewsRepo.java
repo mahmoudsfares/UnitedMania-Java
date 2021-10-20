@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.unitedmania.model.News;
+
+import java.net.UnknownHostException;
 import java.util.List;
 
 import com.example.unitedmania.Retrofit.RetrofitClient;
@@ -33,7 +35,10 @@ public class NewsRepo {
 
             @Override
             public void onFailure(@NonNull Call<NewsResponse> call, @NonNull Throwable t) {
-                news.postValue(new Error(t.toString()));
+                if(t instanceof UnknownHostException)
+                    news.postValue(new Error("No internet connection."));
+                else
+                    news.postValue(new Error("Error fetching news! please try again later."));
             }
         });
     }
