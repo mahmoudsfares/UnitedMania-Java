@@ -1,26 +1,30 @@
 package com.example.unitedmania.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.unitedmania.DetailsActivity;
-import com.example.unitedmania.News;
+import com.example.unitedmania.model.News;
 import com.example.unitedmania.R;
-import java.util.ArrayList;
+import com.example.unitedmania.ui.news.NewsArticleClickCallback;
+
+import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterViewHolder> {
 
-    Context mContext;
+    final private NewsArticleClickCallback newsArticleClickCallback;
     // holds fetched data, set by setNews() method
-    private ArrayList<News> mNewsList;
+    private List<News> mNewsList;
     // current news item
     News currentNews;
-    
+
+    public NewsAdapter(NewsArticleClickCallback newsArticleClickCallback) {
+        this.newsArticleClickCallback = newsArticleClickCallback;
+    }
+
     // inflate the list item layout as a viewholder
     @NonNull
     @Override
@@ -28,8 +32,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         final Context context = parent.getContext();
         int layoutIdForListItem = R.layout.news_item;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
-        final View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
+        final View view = inflater.inflate(layoutIdForListItem, parent, false);
         return new NewsAdapterViewHolder(view);
     }
 
@@ -37,7 +40,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
     @Override
     public void onBindViewHolder(@NonNull NewsAdapterViewHolder holder, int position) {
         currentNews = mNewsList.get(position);
-        holder.mSource.setText(currentNews.getSource());
+        holder.mSource.setText(currentNews.getSource().getName());
         holder.mTitle.setText(currentNews.getTitle());
     }
 
@@ -58,27 +61,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             mTitle = itemView.findViewById(R.id.news_title);
 
             // go to the details of the news when it's clicked on
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    currentNews = mNewsList.get(position);
-                    Intent toDetails = new Intent(mContext, DetailsActivity.class);
-                    toDetails.putExtra("source", currentNews.getSource());
-                    toDetails.putExtra("title", currentNews.getTitle());
-                    toDetails.putExtra("details", currentNews.getDetails());
-                    toDetails.putExtra("url", currentNews.getUrl());
-                    toDetails.putExtra("imageUrl", currentNews.getImageUrl());
-                    mContext.startActivity(toDetails);
-                }
+            itemView.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
+                currentNews = mNewsList.get(position);
+                newsArticleClickCallback.onNewsArticleClicked(currentNews);
             });
         }
     }
 
     // populates data arraylist with the fetched data arraylist
-    public void setNews(Context context, ArrayList<News> news){
+    public void setNews(List<News> news){
         mNewsList = news;
-        mContext = context;
         notifyDataSetChanged();
     }
 }

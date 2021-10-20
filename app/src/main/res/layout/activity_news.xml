@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="@dimen/normal_padding"
     android:paddingRight="@dimen/normal_padding"
-    tools:context=".NewsActivity">
+    tools:context=".ui.news.NewsActivity">
 
 
     <TextView

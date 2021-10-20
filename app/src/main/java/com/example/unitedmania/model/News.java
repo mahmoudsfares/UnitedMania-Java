@@ -1,18 +1,21 @@
-package com.example.unitedmania;
+package com.example.unitedmania.model;
+
+import com.google.gson.annotations.SerializedName;
 
 public class News {
-    // news source
-    private String mSource;
-    // news title
-    private String mTitle;
-    // news details
-    private String mDetails;
-    // news source url
-    private String mUrl;
-    // news corresponding image
-    private String mImageUrl;
 
-    public News (String source, String title, String details, String url, String imageUrl){
+    @SerializedName("source")
+    final private NewsSource mSource;
+    @SerializedName("title")
+    final private String mTitle;
+    @SerializedName("content")
+    final private String mDetails;
+    @SerializedName("url")
+    final private String mUrl;
+    @SerializedName("urlToImage")
+    final private String mImageUrl;
+
+    public News (NewsSource source, String title, String details, String url, String imageUrl){
         mSource = source;
         mTitle = title;
         mDetails = details;
@@ -20,7 +23,7 @@ public class News {
         mImageUrl = imageUrl;
     }
 
-    public String getSource() {
+    public NewsSource getSource() {
         return mSource;
     }
 

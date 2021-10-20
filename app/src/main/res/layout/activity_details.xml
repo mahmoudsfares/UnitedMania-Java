@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/normal_padding"
-    tools:context=".DetailsActivity">
+    tools:context=".ui.DetailsActivity">
 
     <ImageView
         android:id="@+id/details_image"
