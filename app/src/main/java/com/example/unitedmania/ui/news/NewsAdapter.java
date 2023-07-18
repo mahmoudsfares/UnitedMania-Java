@@ -1,17 +1,14 @@
-package com.example.unitedmania.adapter;
+package com.example.unitedmania.ui.news;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.unitedmania.databinding.NewsItemBinding;
 import com.example.unitedmania.model.News;
-import com.example.unitedmania.R;
-import com.example.unitedmania.ui.news.NewsArticleClickCallback;
 
 import java.util.List;
 

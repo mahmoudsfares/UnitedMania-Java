@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.unitedmania.R;
-import com.example.unitedmania.adapter.NewsAdapter;
 import com.example.unitedmania.databinding.FragmentNewsBinding;
 import com.example.unitedmania.model.News;
 import com.example.unitedmania.model.state.Error;
