@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         NavController navController = ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).getNavController();
 
-        navController.addOnDestinationChangedListener((NavController.OnDestinationChangedListener)
+        navController.addOnDestinationChangedListener(
                 (controller, destination, arguments) -> getSupportActionBar().setDisplayHomeAsUpEnabled(destination.getId() != R.id.newsFragment));
     }
 

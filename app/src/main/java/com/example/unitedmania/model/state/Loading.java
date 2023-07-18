@@ -1,3 +1,3 @@
 package com.example.unitedmania.model.state;
 
-public class Loading extends FetchState{ }
+public class Loading<T> extends FetchState<T>{ }

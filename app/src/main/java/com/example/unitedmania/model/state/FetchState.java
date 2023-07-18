@@ -1,14 +1,14 @@
 package com.example.unitedmania.model.state;
 
-public class FetchState {
-    private Object data = null;
+public class FetchState<T> {
+    private T data = null;
     private String error = null;
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 

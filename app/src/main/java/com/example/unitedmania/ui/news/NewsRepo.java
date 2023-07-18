@@ -22,23 +22,27 @@ import retrofit2.Response;
 
 public class NewsRepo {
 
-    void fetchNews (MutableLiveData<FetchState> news) {
-        news.postValue(new Loading());
+    void fetchNews(MutableLiveData<FetchState<List<News>>> news) {
+        news.postValue(new Loading<>());
         RetrofitServiceInterface serviceInterface = RetrofitClient.getClient().create(RetrofitServiceInterface.class);
         Call<NewsResponse> call = serviceInterface.getNews();
         call.enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(@NonNull Call<NewsResponse> call, @NonNull Response<NewsResponse> response) {
                 List<News> newsList = response.body().getArticles();
-                news.postValue(new Success(newsList));
+                if (newsList == null || newsList.isEmpty()) {
+                    news.postValue(new Error<>("No news available."));
+                } else {
+                    news.postValue(new Success<>(newsList));
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<NewsResponse> call, @NonNull Throwable t) {
-                if(t instanceof UnknownHostException)
-                    news.postValue(new Error("No internet connection."));
+                if (t instanceof UnknownHostException)
+                    news.postValue(new Error<>("No internet connection."));
                 else
-                    news.postValue(new Error("Error fetching news! please try again later."));
+                    news.postValue(new Error<>("Error fetching news! please try again later."));
             }
         });
     }

@@ -24,11 +24,14 @@ import java.util.List;
 
 public class NewsFragment extends Fragment implements NewsArticleClickCallback {
 
+    private NewsViewModel viewModel;
     private FragmentNewsBinding binding;
+    private NewsAdapter newsAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle("Latest News");
         binding = FragmentNewsBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
     }
@@ -37,47 +40,20 @@ public class NewsFragment extends Fragment implements NewsArticleClickCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getActivity().setTitle("Latest News");
+        viewModel = new ViewModelProvider(this).get(NewsViewModel.class);
 
-        NewsViewModel viewModel = new ViewModelProvider(this).get(NewsViewModel.class);
+        prepareUi();
+        viewModel.fetchNews();
 
-        binding.refresher.setColorSchemeResources(R.color.background);
-        binding.refresher.setOnRefreshListener(() -> new Handler().postDelayed(() -> {
-            viewModel.fetchNews();
-            binding.refresher.setRefreshing(false);
-        }, 1000));
-
-        binding.list.setHasFixedSize(true);
-        NewsAdapter newsAdapter = new NewsAdapter(this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        binding.list.setAdapter(newsAdapter);
-        binding.list.setLayoutManager(layoutManager);
-
-        if(viewModel.getNewsList().getValue() instanceof Success){
-            binding.loadingSpinner.setVisibility(View.INVISIBLE);
-            binding.noResults.setVisibility(View.INVISIBLE);
-            binding.list.setVisibility(View.VISIBLE);
-            newsAdapter.setNews((List<News>) viewModel.getNewsList().getValue().getData());
-        }
-        else {
-            viewModel.fetchNews();
-        }
-
-        viewModel.getNewsList().observe(getViewLifecycleOwner(), news -> {
-            if (news instanceof Loading) {
-                binding.loadingSpinner.setVisibility(View.VISIBLE);
-                binding.noResults.setVisibility(View.INVISIBLE);
-                binding.list.setVisibility(View.INVISIBLE);
-            } else if (news instanceof Error) {
-                binding.loadingSpinner.setVisibility(View.INVISIBLE);
-                binding.noResults.setVisibility(View.VISIBLE);
-                binding.list.setVisibility(View.INVISIBLE);
-                binding.noResults.setText(news.getError());
-            } else if (news instanceof Success) {
-                binding.loadingSpinner.setVisibility(View.INVISIBLE);
-                binding.noResults.setVisibility(View.INVISIBLE);
-                binding.list.setVisibility(View.VISIBLE);
-                newsAdapter.setNews((List<News>) news.getData());
+        viewModel.getNewsList().observe(getViewLifecycleOwner(), newsState -> {
+            if (newsState instanceof Loading) {
+                showLoadingUi();
+            } else if (newsState instanceof Error) {
+                String error = newsState.getError();
+                showErrorUi(error);
+            } else if (newsState instanceof Success) {
+                List<News> news = newsState.getData();
+                showNewsUi(news);
             }
         });
     }
@@ -92,5 +68,46 @@ public class NewsFragment extends Fragment implements NewsArticleClickCallback {
                 currentNews.getImageUrl()
                 );
         Navigation.findNavController(getView()).navigate(action);
+    }
+
+    private void prepareUi(){
+        prepareRefresher();
+        prepareNewsList();
+    }
+
+    private void prepareRefresher(){
+        binding.refresher.setColorSchemeResources(R.color.background);
+        binding.refresher.setOnRefreshListener(() -> new Handler().postDelayed(() -> {
+            viewModel.fetchNews();
+            binding.refresher.setRefreshing(false);
+        }, 1000));
+    }
+
+    private void prepareNewsList(){
+        newsAdapter = new NewsAdapter(this);
+        binding.list.setAdapter(newsAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        binding.list.setLayoutManager(layoutManager);
+        binding.list.setHasFixedSize(true);
+    }
+
+    private void showLoadingUi(){
+        binding.loadingSpinner.setVisibility(View.VISIBLE);
+        binding.noResults.setVisibility(View.INVISIBLE);
+        binding.list.setVisibility(View.INVISIBLE);
+    }
+
+    private void showErrorUi(String error){
+        binding.loadingSpinner.setVisibility(View.INVISIBLE);
+        binding.noResults.setVisibility(View.VISIBLE);
+        binding.list.setVisibility(View.INVISIBLE);
+        binding.noResults.setText(error);
+    }
+
+    private void showNewsUi(List<News> news){
+        binding.loadingSpinner.setVisibility(View.INVISIBLE);
+        binding.noResults.setVisibility(View.INVISIBLE);
+        binding.list.setVisibility(View.VISIBLE);
+        newsAdapter.setNews(news);
     }
 }
